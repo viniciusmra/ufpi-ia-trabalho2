@@ -1,0 +1,18 @@
+{
+    "number_inputs":2,
+    "layers":[
+       {
+         "number_perceptrons":1,
+          "perceptrons":[
+             {
+                "weights":[
+                   0.5,
+                   0.4
+                ],
+                "bias":1
+             }
+          ]
+       }
+    ]
+ }
+ 
