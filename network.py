@@ -58,6 +58,7 @@ class Layer:
             print(f"Perceptron {index+1}: ", end='')
             perceptron.show()
 
+
 # Classe perceptron
 class Perceptron:
     def __init__(self,activation_function, number_inputs, weights=None, bias=None):
