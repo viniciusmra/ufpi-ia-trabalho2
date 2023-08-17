@@ -89,69 +89,27 @@ class Perceptron:
         print(f"weights: {self.weights} - bias: {self.bias}")
 
 def step_function(x):
-    return 1 if x >= 0 else 0
+    return x
+    #return 1 if x >= 0 else 0
 
 if __name__ == "__main__":
     net = Network(activation_function=step_function)
 
     # Criação da rede camada por camada e neurônio por neurônio
-    net.create_random(2, [2, 3, 1]) 
+    #net.create_random(2, [2, 2]) 
+    net.load("./networks/network2.json")
 
     for idx, layer in enumerate(net.layers):
         print(f"Layer {idx + 1}:")
         layer.show()
 
-    # Dados de treinamento
+    #Dados de treinamento
     training_data = [
-        (np.array([0, 0]), 0),
-        (np.array([0, 1]), 1),
-        (np.array([1, 0]), 1),
-        (np.array([1, 1]), 0)
+        #(np.array([0, 0]), 0),
+        #(np.array([0, 1]), 1),
+        #(np.array([1, 0]), 1),
+        (np.array([1, 2]), 0)
     ]
-
-# learning_rate = 0.1
-
-# # Crie sua rede neural e camadas aqui (como no código original)
-
-# desired_error = 0.01  # Define your desired error threshold
-# total_error = float('inf')  # Initialize total_error with a large value
-
-# epoch = 0
-# while total_error > desired_error:
-#     total_error = 0
-
-#     print(f"\nEpoch {epoch + 1}:")
-
-#     for inputs, target in training_data:
-#         # Forward pass
-#         current_output = inputs
-#         for layer in net.layers:
-#             current_output = np.array([perceptron.predict(current_output) for perceptron in layer.perceptrons])
-
-#         # Calculate error
-#         error = target - current_output
-#         total_error += np.sum(np.abs(error))
-
-#         # Backpropagation and weight update
-#         for layer in reversed(net.layers):
-#             for perceptron, perceptron_error in zip(layer.perceptrons, error):
-#                 delta = perceptron_error * learning_rate
-#                 perceptron.weights += delta * current_output
-#                 perceptron.bias += delta
-
-#                 print(f"Updated weights: {perceptron.weights} - Updated bias: {perceptron.bias}")
-
-#     print(f"Total Error: {total_error}")
-#     epoch += 1
-
-# # Mostrar os pesos e bias finais após o treinamento
-# print("\nFinal Weights and Biases:")
-# for idx, layer in enumerate(net.layers):
-#     for perceptron_idx, perceptron in enumerate(layer.perceptrons):
-#         print(f"Layer {idx + 1}, Perceptron {perceptron_idx + 1}:")
-#         perceptron.show()
-
-# net.save("./networks/network3.json")
 
 
     num_epochs = 10
@@ -178,22 +136,36 @@ if __name__ == "__main__":
                     print(f"    Bias: {perceptron.bias}")
                     print(f"    Output: {current_output[perceptron_idx]}")
 
-            # Calculate error
+
+            #Calculate error
             error = target - current_output
             total_error += np.sum(np.abs(error))
 
             # Backpropagation and weight update
             for layer_idx, layer in reversed(list(enumerate(net.layers))):
                 print(f"\nBackpropagation - Layer {layer_idx + 1}:")
-
+                #derivada delta
                 for perceptron_idx, (perceptron, perceptron_error) in enumerate(zip(layer.perceptrons, error)):
-                    delta = perceptron_error * learning_rate
+                    print(f">>>>>>>>>ERROR ERROR ERROR {perceptron_idx} -  {perceptron_error}")
+                    perceptron.show()
+                    print(">>>>>>>>")
+                    if previous_delta is None:
+                        # Para a primeira camada, calcular o delta como o erro multiplicado pela taxa de aprendizado
+                        delta = perceptron_error * learning_rate
+                    else:
+                        # Para as camadas subsequentes, usar o delta anterior
+                        delta = (previous_delta * perceptron.weights) * delta
+                    
+                    # Atualizar pesos e viés
                     perceptron.weights += delta * current_output
                     perceptron.bias += delta
 
                     print(f"  Perceptron {perceptron_idx + 1}:")
                     print(f"    Updated Weights: {perceptron.weights}")
                     print(f"    Updated Bias: {perceptron.bias}")
+                    
+
+                    previous_delta = delta
 
         print(f"Total Error: {total_error}")
     
