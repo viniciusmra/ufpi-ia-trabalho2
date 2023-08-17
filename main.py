@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 net = network.Network()
 net.create_random(2, [2, 1])
 #net.load("./networks/network2.json")
+#net.save("./networks/network3.json")
 
 #primeira tabela
 tr = training.Training([[[0,0],[0]], 
